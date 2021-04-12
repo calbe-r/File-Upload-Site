@@ -8,7 +8,7 @@ app.get('/',(req,res)=>{
 	res.sendFile(__dirname+'/FUS/index.html',console.error)
 })
 
-app.use(fileUpload());
+app.use(fileUpload({createParentPath: true}));
 
 app.post('/FUS/uploads', function(req,res) {
 	let sampleFile;
