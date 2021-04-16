@@ -7,8 +7,9 @@ const UploadSchema = new Schema ({
         required: true
     },
     date: {
-        type: date,
-        default: date.now
+        type: Date,
+        default: Date.now,
+        required: true
     }
 });
 

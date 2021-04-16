@@ -22,7 +22,7 @@ app.get('/',(req,res)=>{
 app.use(fileUpload({createParentPath: true}));
 
 //Mongoose Connection
-await mongoose.connect(uri, {
+mongoose.connect(uri, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useFindAndModify: false,
@@ -30,7 +30,11 @@ await mongoose.connect(uri, {
 });
 
 //Handles the file uploads
-app.post('/FUS/uploads', function(req,res) {
+app.post(
+	'/FUS/uploads', 
+
+	async(req,res) =>  {
+
 	let sampleFile;
 	let uploadPath;
 	
@@ -43,11 +47,13 @@ app.post('/FUS/uploads', function(req,res) {
 	uploadPath = __dirname + '/FUS/uploads/'+sampleFile.mimetype+'/' + sampleFile.name;
 
 	//Uploading the File Name to the database
-	const NewUpload = new UploadModel({
-		message: sampleFile
-	});
+		const NewUpload = new UploadModel({
+			message: sampleFile.name
+		});
 	
+
 	await NewUpload.save;
+
 
 	sampleFile.mv(uploadPath, function(err) {
 		if (err)
