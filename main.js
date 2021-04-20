@@ -5,7 +5,7 @@ const app = express()
 const mongoose = require('mongoose')
 
 //Mongoose URI
-const uri = "mongodb+srv://admin:Password123@cluster0.wt1jg.mongodb.net/Test?retryWrites=true&w=majority"
+const uri = "mongodb+srv://admin:Password123@cluster0.wt1jg.mongodb.net/Upload_Logger?retryWrites=true&w=majority"
 
 //Hello World c:
 console.log("Hello World")
@@ -29,6 +29,14 @@ mongoose.connect(uri, {
 	useCreateIndex:true
 });
 
+const db = mongoose.connection;
+
+db.on("error", console.error.bind(console, "connection error:"));
+
+db.once("open", function() {
+  console.log("Connection Successful!");
+});
+
 //Handles the file uploads
 app.post(
 	'/FUS/uploads', 
@@ -47,12 +55,12 @@ app.post(
 	uploadPath = __dirname + '/FUS/uploads/'+sampleFile.mimetype+'/' + sampleFile.name;
 
 	//Uploading the File Name to the database
-		const NewUpload = new UploadModel({
-			message: sampleFile.name
-		});
+	const NewUpload = new UploadModel({
+		message: sampleFile.name,
+	});
 	
 
-	await NewUpload.save;
+	await NewUpload.save();
 
 
 	sampleFile.mv(uploadPath, function(err) {
